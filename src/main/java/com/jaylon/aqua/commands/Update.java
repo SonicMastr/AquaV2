@@ -49,7 +49,7 @@ public class Update implements BaseCommand {
                 e.printStackTrace();
             }
             if (s.contentEquals("Already up to date.")) {
-                System.out.println(s);
+                logger.info(s);
                 message.editMessage(s).queue();
             } else {
                 logger.info("Found Update.Building...");
