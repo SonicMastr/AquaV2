@@ -18,6 +18,7 @@ public class CommandRegister {
         addCommand(new Ping());
         addCommand(new Help(this));
         addCommand(new Share());
+        addCommand(new Update());
     }
 
     private final Map<String, BaseCommand> commands = new HashMap<>();

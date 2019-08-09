@@ -1,6 +1,5 @@
 package com.jaylon.aqua.updater;
 
-import com.jaylon.aqua.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,9 +9,7 @@ import java.util.regex.Pattern;
 
 
 public class VersionDeployer {
-    Logger logger = LoggerFactory.getLogger(Main.class);
-
-    private static VersionDeployer instance;
+    Logger logger = LoggerFactory.getLogger(VersionDeployer.class);
 
     public VersionDeployer(String list) throws NullPointerException, IOException {
         final List<String> versions = new VersionManager().checkDir(list);

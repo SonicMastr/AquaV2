@@ -1,10 +1,8 @@
 package com.jaylon.aqua.commands;
 
 import com.jaylon.aqua.objects.BaseCommand;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
-import java.awt.*;
 import java.util.List;
 
 public class Ping implements BaseCommand {
@@ -24,17 +22,11 @@ public class Ping implements BaseCommand {
     public String[] getAliases() { return new String[]{"p", "pg"}; }
 
     @Override
-    public String getUsage() {
-        return null;
-    }
+    public String getUsage() { return null; }
 
     @Override
-    public String getDesc() {
-        return "Gives the Ping of the Websocket";
-    }
+    public String getDesc() { return "Gives the Ping of the Websocket"; }
 
     @Override
-    public Boolean getOwner() {
-        return (boolean) false;
-    }
+    public Boolean getOwner() { return true; }
 }

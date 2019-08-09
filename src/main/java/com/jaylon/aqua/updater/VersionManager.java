@@ -1,6 +1,5 @@
 package com.jaylon.aqua.updater;
 
-import com.jaylon.aqua.Main;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,7 +9,7 @@ import java.util.List;
 
 public class VersionManager {
 
-    Logger logger = LoggerFactory.getLogger(Main.class);
+    Logger logger = LoggerFactory.getLogger(VersionManager.class);
     private final List<String> versions = new ArrayList<>();
 
     public List<String> checkDir(String list) throws NullPointerException{
@@ -28,7 +27,7 @@ public class VersionManager {
     }
 
     double getVersion() {
-        return 1.0;
+        return 1.1;
     }
 
     public void deleteJar(Double version) {
