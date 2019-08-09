@@ -29,13 +29,12 @@ public class Update implements BaseCommand {
             }
             if (result != 0) {
                 try {
-                    message.editMessageFormat("error: " + br.readLine()).queue();
+                    message.editMessageFormat("Error While " + br.readLine()).queue();
                     return;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-            System.out.println(result);
             String s = null;
             try {
                 s = br.readLine();

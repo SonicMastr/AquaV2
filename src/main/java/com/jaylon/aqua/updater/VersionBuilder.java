@@ -17,11 +17,11 @@ public class VersionBuilder {
         int result = process.waitFor();
         if (result != 0) {
             logger.error("Failed to Build Jar");
-            msg.editMessage("Failed to Build New Version");
+            msg.editMessage("Failed to Build New Version").queue();
             return;
         }
         logger.info("Build Succeeded");
-        msg.editMessage("Build Succeeded. Deploying New Version...");
+        msg.editMessage("Build Succeeded. Deploying New Version...").queue();
         new VersionDeployer("./");
     }
 }
