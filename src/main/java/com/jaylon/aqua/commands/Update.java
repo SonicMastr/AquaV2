@@ -2,12 +2,18 @@ package com.jaylon.aqua.commands;
 
 import com.jaylon.aqua.objects.BaseCommand;
 import com.jaylon.aqua.updater.VersionBuilder;
+import com.jaylon.aqua.updater.VersionDeployer;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.List;
 
 public class Update implements BaseCommand {
+
+    Logger logger = LoggerFactory.getLogger(Update.class);
+
     @Override
     public void run(List<String> args, MessageReceivedEvent event) {
         event.getChannel().sendMessage("Updating...").queue(( message -> {
@@ -29,6 +35,7 @@ public class Update implements BaseCommand {
             }
             if (result != 0) {
                 try {
+                    logger.error("Error While " + br.readLine());
                     message.editMessageFormat("Error While " + br.readLine()).queue();
                     return;
                 } catch (IOException e) {
@@ -45,6 +52,7 @@ public class Update implements BaseCommand {
                 System.out.println(s);
                 message.editMessage(s).queue();
             } else {
+                logger.info("Found Update.Building...");
                 message.editMessage("Found Update. Building...").queue((msg -> {
                     try {
                         new VersionBuilder(msg);
