@@ -1,7 +1,7 @@
 package com.jaylon.aqua.commands;
 
 import com.jaylon.aqua.objects.BaseCommand;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ public class Ping implements BaseCommand {
     @Override
     public void run(List<String> args, MessageReceivedEvent event) {
         event.getChannel().sendMessage("Pinging...").queue((message ->
-                message.editMessageFormat("Ping is %sms", event.getJDA().getPing()).queue())
+                message.editMessageFormat("Ping is %sms", event.getJDA().getGatewayPing()).queue())
         );
     }
 

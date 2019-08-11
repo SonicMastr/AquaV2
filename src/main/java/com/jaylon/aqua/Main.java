@@ -3,9 +3,9 @@ package com.jaylon.aqua;
 import com.jaylon.aqua.config.Config;
 import com.jaylon.aqua.events.*;
 import com.jaylon.aqua.updater.VersionDeployer;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.entities.Activity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +27,8 @@ public class Main {
             logger.info("Starting");
             new JDABuilder(AccountType.BOT)
                     .setToken(config.getString("token"))
-                    .setAudioEnabled(false)
-                    .setGame(Game.playing("Being Useless (In Java)"))
-                    .addEventListener(new Ready(), messageReceived)
+                    .setActivity(Activity.playing("Being Useless (In Java)"))
+                    .addEventListeners(new Ready(), messageReceived)
                     .build().awaitReady();
             logger.info("Running");
         } catch (LoginException | InterruptedException e) {

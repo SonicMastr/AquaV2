@@ -27,7 +27,7 @@ public class VersionManager {
     }
 
     double getVersion() {
-        return 1.0;
+        return 1.01;
     }
 
     public void deleteJar(Double version) {

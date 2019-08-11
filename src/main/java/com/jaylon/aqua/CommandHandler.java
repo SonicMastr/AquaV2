@@ -1,8 +1,7 @@
 package com.jaylon.aqua;
 
 import com.jaylon.aqua.objects.BaseCommand;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.util.Arrays;

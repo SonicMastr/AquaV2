@@ -1,10 +1,9 @@
 package com.jaylon.aqua.objects;
 
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public interface BaseCommand {
 

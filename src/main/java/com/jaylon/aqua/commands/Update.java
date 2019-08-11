@@ -2,8 +2,7 @@ package com.jaylon.aqua.commands;
 
 import com.jaylon.aqua.objects.BaseCommand;
 import com.jaylon.aqua.updater.VersionBuilder;
-import com.jaylon.aqua.updater.VersionDeployer;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
