@@ -12,5 +12,5 @@ public interface BaseCommand {
     String[] getAliases();
     String getUsage();
     String getDesc();
-    Boolean getOwner();
+    String getType();
 }

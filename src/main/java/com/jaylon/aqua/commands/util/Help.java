@@ -1,9 +1,10 @@
-package com.jaylon.aqua.commands;
+package com.jaylon.aqua.commands.util;
 
 import com.jaylon.aqua.CommandRegister;
 import com.jaylon.aqua.Settings;
 import com.jaylon.aqua.objects.BaseCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.awt.*;
@@ -19,9 +20,10 @@ public class Help implements BaseCommand {
 
     @Override
     public void run(List<String> args, MessageReceivedEvent event) {
+        User author = event.getAuthor();
 
         if(args.isEmpty()) {
-            Embed(event);
+            defaultEmbed(event, author);
             return;
         }
 
@@ -35,7 +37,7 @@ public class Help implements BaseCommand {
 
         String message = "Command `" + command.getName() + "`\n" + command.getDesc();
 
-        event.getChannel().sendMessage(message).queue();
+        sendMessageString(author, message, event);
 
 
     }
@@ -61,11 +63,11 @@ public class Help implements BaseCommand {
     }
 
     @Override
-    public Boolean getOwner() {
-        return null;
+    public String getType() {
+        return "util";
     }
 
-    private void Embed(MessageReceivedEvent event) {
+    private void defaultEmbed(MessageReceivedEvent event, User author) {
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setTitle("Commands")
@@ -74,9 +76,32 @@ public class Help implements BaseCommand {
         StringBuilder description = builder.getDescriptionBuilder();
 
         register.getCommands().forEach(
-                (command) -> description.append('`').append(command.getName()).append("`\n")
+                (command) -> {
+                    if (!command.getType().equals("owner")) description.append('`').append(command.getName()).append("`\n");
+                }
         );
 
-        event.getChannel().sendMessage(builder.build()).queue();
+        sendMessage(author, builder.build(), event);
+    }
+
+    private void commandEmbed(MessageReceivedEvent event) {
+
+    }
+
+    private void sendMessage(User user, MessageEmbed content, MessageReceivedEvent event) {
+        user.openPrivateChannel().queue(channel ->
+                channel.sendMessage(content).queue(success -> {
+                    if (!event.isFromType(ChannelType.PRIVATE)) event.getChannel().sendMessage("I've sent you a DM with my Commands! ||It's not much||").queue();
+                }, error -> {
+                    event.getChannel().sendMessage(content).queue();
+                }));
+    }
+    private void sendMessageString(User user, String content, MessageReceivedEvent event) {
+        user.openPrivateChannel().queue(channel ->
+                channel.sendMessage(content).queue(success -> {
+                    if (!event.isFromType(ChannelType.PRIVATE)) event.getChannel().sendMessage("I've sent you a DM for this Command").queue();
+                }, error -> {
+                    event.getChannel().sendMessage(content).queue();
+                }));
     }
 }

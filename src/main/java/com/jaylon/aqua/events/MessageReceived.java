@@ -44,11 +44,15 @@ public class MessageReceived extends ListenerAdapter {
                 manager.handleCommand(event);
             }
         } else if (event.isFromType(ChannelType.PRIVATE)) {
+            if (event.getMessage().getContentRaw().toLowerCase().startsWith(Settings.PREFIX + "help")) {
+                manager.handleCommand(event);
+            }
             logger.debug(String.format("[PRIVATE]<%#s>: %s", author, content));
         }
     }
 
     private void shutdown(JDA jda) {
         jda.shutdown();
+        System.exit(1);
     }
 }

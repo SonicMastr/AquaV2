@@ -1,6 +1,8 @@
 package com.jaylon.aqua;
 
-import com.jaylon.aqua.commands.*;
+import com.jaylon.aqua.commands.main.*;
+import com.jaylon.aqua.commands.owner.*;
+import com.jaylon.aqua.commands.util.*;
 import com.jaylon.aqua.objects.BaseCommand;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ public class CommandRegister {
         addCommand(new Help(this));
         addCommand(new Share());
         addCommand(new Update());
+        addCommand(new Version());
     }
 
     private final Map<String, BaseCommand> commands = new HashMap<>();

@@ -9,22 +9,24 @@ import java.util.regex.Pattern;
 
 
 public class VersionDeployer {
-    Logger logger = LoggerFactory.getLogger(VersionDeployer.class);
+    private Logger logger = LoggerFactory.getLogger(VersionDeployer.class);
 
     public VersionDeployer(String list) throws NullPointerException, IOException {
         final List<String> versions = new VersionManager().checkDir(list);
         final Double versionCurrent = new VersionManager().getVersion();
-        for (int i=0;i < versions.size();i++)
-        {
-            String versionTemp = versions.get(i);
-            final String[] split = versionTemp.replaceFirst("(?i)" + Pattern.quote("AquaV2-"), "").split("\\s+"); final String versionTemp2 = split[0]; final String[] split2 = versionTemp2.replaceFirst("(?i)" + Pattern.quote(".jar"), "").split("\\s+");
+        for (String versionTemp : versions) {
+            final String[] split = versionTemp.replaceFirst("(?i)" + Pattern.quote("AquaV2-"), "")
+                    .split("\\s+");
+            final String versionTemp2 = split[0];
+            final String[] split2 = versionTemp2.replaceFirst("(?i)" + Pattern.quote(".jar"), "")
+                    .split("\\s+");
             final String versionStr = split2[0];
             final Double versionNumb = Double.parseDouble(versionStr);
             if (versionNumb < versionCurrent) {
                 logger.info("Found Old Version: " + versionNumb.toString());
                 logger.warn("Attempting to Delete...");
                 new VersionManager().deleteJar(versionNumb);
-            } else if (versionNumb == versionCurrent) {
+            } else if (versionNumb.equals(versionCurrent)) {
                 continue;
             } else if (versionNumb > versionCurrent) {
                 logger.info("Found New Version: " + versionNumb.toString());

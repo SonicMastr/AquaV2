@@ -1,4 +1,4 @@
-package com.jaylon.aqua.commands;
+package com.jaylon.aqua.commands.owner;
 
 import com.jaylon.aqua.objects.BaseCommand;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -28,5 +28,5 @@ public class Ping implements BaseCommand {
     public String getDesc() { return "Gives the Ping of the Websocket"; }
 
     @Override
-    public Boolean getOwner() { return true; }
+    public String getType() { return "owner"; }
 }

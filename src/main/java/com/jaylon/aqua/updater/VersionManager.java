@@ -1,5 +1,6 @@
 package com.jaylon.aqua.updater;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,11 +27,9 @@ public class VersionManager {
         return versions;
     }
 
-    double getVersion() {
-        return 1.01;
-    }
+    public double getVersion() { return 1.011; }
 
-    public void deleteJar(Double version) {
+    public void deleteJar(@NotNull Double version) {
         File file = new File("./AquaV2-" + version.toString() + ".jar");
 
         if(file.delete())

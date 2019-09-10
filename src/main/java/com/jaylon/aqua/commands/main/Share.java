@@ -1,4 +1,4 @@
-package com.jaylon.aqua.commands;
+package com.jaylon.aqua.commands.main;
 
 import com.jaylon.aqua.objects.BaseCommand;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -53,14 +53,14 @@ public class Share implements BaseCommand {
     }
 
     @Override
-    public Boolean getOwner() {
-        return null;
+    public String getType() {
+        return "main";
     }
 
     private void Embed(long vcID, long guildID, String guildName, String vcName, String guildIcon, MessageReceivedEvent event) {
 
         EmbedBuilder builder = new EmbedBuilder()
-                .setAuthor("Screenshare Link For Channel: " + vcName,"https://discordapp.com/channels/" + guildID + "/" + vcID , event.getAuthor().getAvatarUrl())
+                .setAuthor("Screenshare Link For Channel: " + vcName,null , event.getAuthor().getAvatarUrl())
                 .setDescription("[Screenshare](https://discordapp.com/channels/" + guildID + "/" + vcID + ")")
                 .setThumbnail(guildIcon)
                 .setFooter(guildName, null)

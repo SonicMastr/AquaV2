@@ -1,4 +1,4 @@
-package com.jaylon.aqua.commands;
+package com.jaylon.aqua.commands.owner;
 
 import com.jaylon.aqua.objects.BaseCommand;
 import com.jaylon.aqua.updater.VersionBuilder;
@@ -84,7 +84,7 @@ public class Update implements BaseCommand {
     }
 
     @Override
-    public Boolean getOwner() {
-        return true;
+    public String getType() {
+        return "owner";
     }
 }
