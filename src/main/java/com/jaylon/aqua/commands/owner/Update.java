@@ -1,6 +1,6 @@
 package com.jaylon.aqua.commands.owner;
 
-import com.jaylon.aqua.objects.BaseCommand;
+import com.jaylon.aqua.objects.CommandInterface;
 import com.jaylon.aqua.updater.VersionBuilder;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.slf4j.Logger;
@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.util.List;
 
-public class Update implements BaseCommand {
+public class Update implements CommandInterface {
 
     Logger logger = LoggerFactory.getLogger(Update.class);
 

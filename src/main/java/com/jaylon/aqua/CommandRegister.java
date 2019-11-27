@@ -3,7 +3,7 @@ package com.jaylon.aqua;
 import com.jaylon.aqua.commands.main.*;
 import com.jaylon.aqua.commands.owner.*;
 import com.jaylon.aqua.commands.util.*;
-import com.jaylon.aqua.objects.BaseCommand;
+import com.jaylon.aqua.objects.CommandInterface;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,24 +22,25 @@ public class CommandRegister {
         addCommand(new Share());
         addCommand(new Update());
         addCommand(new Version());
+        addCommand(new Execute());
+        addCommand(new YouTubetoMP3());
     }
 
-    private final Map<String, BaseCommand> commands = new HashMap<>();
-    private final Map<String, BaseCommand> aliases = new HashMap<>();
+    private final Map<String, CommandInterface> commands = new HashMap<>();
+    private final Map<String, CommandInterface> aliases = new HashMap<>();
 
-    public Map<String, BaseCommand> com() { return commands; }
+    public Map<String, CommandInterface> com() { return commands; }
+    public Map<String, CommandInterface> ali() { return aliases; }
 
-    public Map<String, BaseCommand> ali() { return aliases; }
-
-    public Collection<BaseCommand> getCommands() {
+    public Collection<CommandInterface> getCommands() {
         return commands.values();
     }
 
-    public BaseCommand getCommand(@NotNull String name) {
+    public CommandInterface getCommand(@NotNull String name) {
         return commands.get(name);
     }
 
-    public void addCommand(BaseCommand command) {
+    public void addCommand(CommandInterface command) {
         // Check for Command Name
         if (!commands.containsKey(command.getName())); {
             commands.put(command.getName(), command);
@@ -49,9 +50,8 @@ public class CommandRegister {
         if (!aliases.containsValue(command)) {
             String[] array = command.getAliases();
             if (array == null) return;
-            int a;
             String alias;
-            for (a = 0; a < array.length; a++) {
+            for (int a = 0; a < array.length; a++) {
                 alias = array[a];
                 aliases.put(alias, command);
                 logger.info(String.format("Loaded Alias %s for Command %s", alias, command.getName()));

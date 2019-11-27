@@ -1,13 +1,13 @@
 package com.jaylon.aqua.commands.owner;
 
-import com.jaylon.aqua.objects.BaseCommand;
+import com.jaylon.aqua.objects.CommandInterface;
 import com.jaylon.aqua.updater.VersionManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 import java.util.List;
 
-public class Version implements BaseCommand {
+public class Version implements CommandInterface {
     @Override
     public void run(List<String> args, MessageReceivedEvent event) throws IOException, InterruptedException {
         double ver = new VersionManager().getVersion();

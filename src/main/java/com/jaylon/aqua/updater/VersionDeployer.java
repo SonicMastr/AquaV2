@@ -12,8 +12,10 @@ public class VersionDeployer {
     private Logger logger = LoggerFactory.getLogger(VersionDeployer.class);
 
     public VersionDeployer(String list) throws NullPointerException, IOException {
-        final List<String> versions = new VersionManager().checkDir(list);
-        final Double versionCurrent = new VersionManager().getVersion();
+        logger.info("Checking For Updated Jar...");
+        VersionManager v = new VersionManager();
+        final List<String> versions = v.checkDir(list);
+        final Double versionCurrent = v.getVersion();
         for (String versionTemp : versions) {
             final String[] split = versionTemp.replaceFirst("(?i)" + Pattern.quote("AquaV2-"), "")
                     .split("\\s+");

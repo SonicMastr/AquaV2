@@ -17,7 +17,6 @@ public class Main {
 
     private Main() throws IOException {
         Logger logger = LoggerFactory.getLogger(Main.class);
-        logger.info("Checking For Updated Jar...");
         new VersionDeployer("./");
         Config config = new Config(new File("config.json"));
         CommandHandler commandHandler = new CommandHandler();

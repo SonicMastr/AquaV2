@@ -1,16 +1,15 @@
 package com.jaylon.aqua.commands.main;
 
-import com.jaylon.aqua.objects.BaseCommand;
+import com.jaylon.aqua.objects.CommandInterface;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-
 import java.awt.*;
 import java.util.List;
 
-public class Share implements BaseCommand {
+public class Share implements CommandInterface {
     @Override
     public void run(List<String> args, MessageReceivedEvent event) {
 

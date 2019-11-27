@@ -1,11 +1,11 @@
 package com.jaylon.aqua.commands.owner;
 
-import com.jaylon.aqua.objects.BaseCommand;
+import com.jaylon.aqua.objects.CommandInterface;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
 
-public class Ping implements BaseCommand {
+public class Ping implements CommandInterface {
     @Override
     public void run(List<String> args, MessageReceivedEvent event) {
         event.getChannel().sendMessage("Pinging...").queue((message ->

@@ -2,7 +2,7 @@ package com.jaylon.aqua.commands.util;
 
 import com.jaylon.aqua.CommandRegister;
 import com.jaylon.aqua.Settings;
-import com.jaylon.aqua.objects.BaseCommand;
+import com.jaylon.aqua.objects.CommandInterface;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import java.awt.*;
 import java.util.List;
 
-public class Help implements BaseCommand {
+public class Help implements CommandInterface {
 
     private final CommandRegister register;
 
@@ -27,7 +27,7 @@ public class Help implements BaseCommand {
             return;
         }
 
-        BaseCommand command = register.getCommand(String.join("", args));
+        CommandInterface command = register.getCommand(String.join("", args));
 
         if(command == null) {
             event.getChannel().sendMessage("Not a Valid Command\n" +
@@ -90,17 +90,17 @@ public class Help implements BaseCommand {
 
     private void sendMessage(User user, MessageEmbed content, MessageReceivedEvent event) {
         user.openPrivateChannel().queue(channel ->
-                channel.sendMessage(content).queue(success -> {
+                channel.sendMessage(content).queue(s -> {
                     if (!event.isFromType(ChannelType.PRIVATE)) event.getChannel().sendMessage("I've sent you a DM with my Commands! ||It's not much||").queue();
-                }, error -> {
+                }, e -> {
                     event.getChannel().sendMessage(content).queue();
                 }));
     }
     private void sendMessageString(User user, String content, MessageReceivedEvent event) {
         user.openPrivateChannel().queue(channel ->
-                channel.sendMessage(content).queue(success -> {
+                channel.sendMessage(content).queue(s -> {
                     if (!event.isFromType(ChannelType.PRIVATE)) event.getChannel().sendMessage("I've sent you a DM for this Command").queue();
-                }, error -> {
+                }, e -> {
                     event.getChannel().sendMessage(content).queue();
                 }));
     }
