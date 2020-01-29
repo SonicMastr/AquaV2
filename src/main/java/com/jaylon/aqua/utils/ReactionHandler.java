@@ -1,8 +1,12 @@
 package com.jaylon.aqua.utils;
 
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageReaction;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.requests.RestAction;
+import net.dv8tion.jda.internal.utils.PermissionUtil;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -85,8 +89,7 @@ public class ReactionHandler {
      */
     public synchronized void cleanCache() {
         long now = System.currentTimeMillis();
-        for (Iterator<Map.Entry<Long, ConcurrentHashMap<Long, ReactionListener<?>>>> iterator = reactions.entrySet().iterator(); iterator.hasNext(); ) {
-            Map.Entry<Long, ConcurrentHashMap<Long, ReactionListener<?>>> mapEntry = iterator.next();
+        for (Map.Entry<Long, ConcurrentHashMap<Long, ReactionListener<?>>> mapEntry : reactions.entrySet()) {
             mapEntry.getValue().values().removeIf(listener -> !listener.isActive() || listener.getExpiresInTimestamp() < now);
             if (mapEntry.getValue().values().isEmpty()) {
                 reactions.remove(mapEntry.getKey());
