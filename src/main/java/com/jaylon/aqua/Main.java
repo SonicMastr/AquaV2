@@ -19,8 +19,8 @@ public class Main {
         Logger logger = LoggerFactory.getLogger(Main.class);
         new VersionDeployer("./");
         Config config = new Config(new File("config.json"));
-        CommandHandler commandHandler = new CommandHandler();
-        MessageReceived messageReceived = new MessageReceived(commandHandler);
+        CommandRegister commandRegister = new CommandRegister();
+        MessageReceived messageReceived = new MessageReceived(commandRegister);
 
         try {
             logger.info("Starting");

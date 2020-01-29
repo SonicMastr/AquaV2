@@ -8,14 +8,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Date;
 import java.util.List;
 
 public class YouTubetoMP3 implements CommandInterface {
     @Override
-    public void run(List<String> args, MessageReceivedEvent event) throws IOException, InterruptedException {
+    public void run(List<String> args, MessageReceivedEvent event) {
         event.getChannel().sendMessage("<a:loading:649047596022759425> `Running...`").queue(message -> {
             String error = ":x: Something went wrong, and I'm not smart enough to explain what it was.";
             if(args.isEmpty()) {
@@ -25,7 +22,7 @@ public class YouTubetoMP3 implements CommandInterface {
             if(System.getProperty("os.name").startsWith("Win")) {
                 try {
                     System.out.println(args.get(0));
-                    processBuilder.command("cmd.exe", "/c", "ytdl " + args + " | ffmpeg -y -i pipe:0 -b:a 128K -vn output.mp3");
+                    processBuilder.command("cmd.exe", "/c", "youtube-dl -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 --no-continue -o output.mp3 " + args.get(0));
                     startProcess(message,  processBuilder);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();

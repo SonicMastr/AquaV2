@@ -24,6 +24,7 @@ public class CommandRegister {
         addCommand(new Version());
         addCommand(new Execute());
         addCommand(new YouTubetoMP3());
+        addCommand(new Anime());
     }
 
     private final Map<String, CommandInterface> commands = new HashMap<>();

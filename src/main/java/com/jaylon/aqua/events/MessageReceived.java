@@ -1,6 +1,7 @@
 package com.jaylon.aqua.events;
 
 import com.jaylon.aqua.CommandHandler;
+import com.jaylon.aqua.CommandRegister;
 import com.jaylon.aqua.Settings;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.*;
@@ -13,10 +14,11 @@ public class MessageReceived extends ListenerAdapter {
 
     private final Logger logger = LoggerFactory.getLogger(MessageReceived.class);
 
-    private final CommandHandler manager;
+    private Runnable manager;
+    private CommandRegister register;
 
-    public MessageReceived(CommandHandler manager) {
-        this.manager = manager;
+    public MessageReceived(CommandRegister register) {
+        this.register = register;
     }
 
     @Override
@@ -41,11 +43,16 @@ public class MessageReceived extends ListenerAdapter {
             }
             if(event.getMessage().getContentRaw().startsWith(Settings.PREFIX) && !event.getMessage().isWebhookMessage() &&
                     !event.getAuthor().isBot()) {
-                manager.handleCommand(event);
+                manager = new CommandHandler(event, register);
+                new Thread(manager).start();
+                logger.info("Nope");
             }
         } else if (event.isFromType(ChannelType.PRIVATE)) {
             if (event.getMessage().getContentRaw().toLowerCase().startsWith(Settings.PREFIX + "help")) {
-                manager.handleCommand(event);
+                manager = new CommandHandler(event, register);
+                new Thread(manager).start();
+                logger.info("Nope");
+                //manager.run(event);
             }
             logger.debug(String.format("[PRIVATE]<%#s>: %s", author, content));
         }

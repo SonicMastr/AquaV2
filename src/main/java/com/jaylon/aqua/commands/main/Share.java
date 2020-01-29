@@ -68,4 +68,5 @@ public class Share implements CommandInterface {
 
         event.getChannel().sendMessage(builder.build()).queue();
     }
+
 }
