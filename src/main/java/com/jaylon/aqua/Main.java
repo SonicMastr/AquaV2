@@ -1,8 +1,10 @@
 package com.jaylon.aqua;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jaylon.aqua.config.Config;
 import com.jaylon.aqua.events.*;
 import com.jaylon.aqua.updater.VersionDeployer;
+import jdk.jfr.Event;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.entities.Activity;
@@ -19,7 +21,8 @@ public class Main {
         Logger logger = LoggerFactory.getLogger(Main.class);
         new VersionDeployer("./");
         Config config = new Config(new File("config.json"));
-        CommandRegister commandRegister = new CommandRegister();
+        EventWaiter waiter = new EventWaiter();
+        CommandRegister commandRegister = new CommandRegister(waiter);
         MessageReceived messageReceived = new MessageReceived(commandRegister);
 
         try {
@@ -27,7 +30,7 @@ public class Main {
             new JDABuilder(AccountType.BOT)
                     .setToken(config.getString("token"))
                     .setActivity(Activity.playing("Being Useless (In Java)"))
-                    .addEventListeners(new Ready(), messageReceived)
+                    .addEventListeners(new Ready(), messageReceived, waiter)
                     .build().awaitReady();
             logger.info("Running");
         } catch (LoginException | InterruptedException e) {

@@ -7,17 +7,16 @@ import java.util.List;
 import java.util.Objects;
 
 public class AnimeObject {
-    private String titleEnglish, titleRomaji, titleNative, siteUrl, thumbLarge, thumbMedium, description, startDate, nextEpisode, status, characters, episodes, nextAiringEpisode;
+    private String titleEnglish, titleRomaji, titleNative, siteUrl, thumbLarge, thumbMedium, description, startDate, nextEpisode, status, characters, episodes;
 
     public AnimeObject(Medium anime) {
         this.titleEnglish = anime.getTitle().getEnglish();
-        this.titleNative = anime.getTitle().getEnglish();
+        this.titleNative = anime.getTitle().getNative();
         this.titleRomaji = anime.getTitle().getRomaji();
         this.siteUrl = anime.getSiteUrl();
         this.thumbLarge = anime.getCoverImage().getLarge();
         this.thumbMedium = anime.getCoverImage().getMedium();
         this.episodes = Objects.requireNonNullElse(anime.getEpisodes().toString(), "None");
-        this.nextAiringEpisode = anime.getNextAiringEpisode().getEpisode().toString();
         setDescription(anime.getDescription());
         setCharacters(anime.getCharacters().getEdges());
         setStatus(anime.getStatus());
@@ -70,7 +69,7 @@ public class AnimeObject {
     }
 
     private void setNextEpisode(NextAiringEpisode episode) {
-        if (episode.getAiringAt() != null && episode.getEpisode() != null) {
+        if (episode != null && episode.getAiringAt() != null && episode.getEpisode() != null) {
             SimpleDateFormat format = new SimpleDateFormat("M/d/yyyy");
             Date date = new Date( (long) episode.getAiringAt() * 1000);
             String nextDate = format.format(date);
@@ -96,14 +95,20 @@ public class AnimeObject {
     /* Getters */
 
     public String getTitleEnglish() {
+        if (titleEnglish == null)
+            this.titleEnglish = this.titleRomaji;
         return titleEnglish;
     }
 
     public String getTitleRomaji() {
+        if (titleRomaji == null)
+            this.titleRomaji = this.titleEnglish;
         return titleRomaji;
     }
 
     public String getTitleNative() {
+        if (titleNative == null)
+            this.titleNative = this.titleEnglish;
         return titleNative;
     }
 
@@ -137,10 +142,6 @@ public class AnimeObject {
 
     public String getCharacters() {
         return characters;
-    }
-
-    public String getNextAiringEpisode() {
-        return nextAiringEpisode;
     }
 
     public String getEpisodes() {

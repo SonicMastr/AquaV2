@@ -1,5 +1,6 @@
 package com.jaylon.aqua;
 
+import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jaylon.aqua.commands.main.*;
 import com.jaylon.aqua.commands.owner.*;
 import com.jaylon.aqua.commands.util.*;
@@ -16,7 +17,7 @@ public class CommandRegister {
 
     private final Logger logger = LoggerFactory.getLogger(CommandRegister.class);
 
-    CommandRegister() {
+    CommandRegister(EventWaiter waiter) {
         addCommand(new Ping());
         addCommand(new Help(this));
         addCommand(new Share());
@@ -24,7 +25,7 @@ public class CommandRegister {
         addCommand(new Version());
         addCommand(new Execute());
         addCommand(new YouTubetoMP3());
-        addCommand(new Anime());
+        addCommand(new Anime(waiter));
     }
 
     private final Map<String, CommandInterface> commands = new HashMap<>();

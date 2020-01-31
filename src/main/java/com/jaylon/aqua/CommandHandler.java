@@ -5,6 +5,7 @@ import com.jaylon.aqua.objects.CommandInterface;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class CommandHandler implements Runnable {
     @Override
     public void run() {
         final String[] split = event.getMessage().getContentRaw().replaceFirst(
-                "(?i)" + Pattern.quote(Settings.PREFIX), "").split("\\s+");
+                "(?i)" + Pattern.quote(Settings.PREFIX), "").trim().split(" +");
         final String comName = split[0].toLowerCase();
 
         keyCheck(event, split, comName, commands);
@@ -42,7 +43,7 @@ public class CommandHandler implements Runnable {
 
     private void keyCheck(MessageReceivedEvent event, String[] split, String comName, Map<String, CommandInterface> aliases) {
         if(aliases.containsKey(comName)) {
-            final List<String> args = Arrays.asList(split).subList(1, split.length);
+            final List<String> args = new ArrayList<>(Arrays.asList(split).subList(1, split.length));
 
             try {
                 logger.info("New Command " + comName + " Thread Spawned");
