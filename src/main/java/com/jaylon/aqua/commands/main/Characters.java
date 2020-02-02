@@ -4,12 +4,21 @@ import com.google.gson.Gson;
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jaylon.aqua.objects.CommandInterface;
 import com.jaylon.aqua.objects.Response;
-import com.jaylon.aqua.objects.weeb.*;
+import com.jaylon.aqua.objects.weeb.AnimeInfo;
+import com.jaylon.aqua.objects.weeb.AnimeObject;
+import com.jaylon.aqua.objects.weeb.WeebObject;
+import com.jaylon.aqua.objects.weebCharacters.CharacterInfo;
+import com.jaylon.aqua.objects.weebCharacters.CharacterObject;
+import com.jaylon.aqua.objects.weebCharacters.WeebCharacterObject;
 import com.jaylon.aqua.utils.Request;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -17,7 +26,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Anime implements CommandInterface {
+public class Characters implements CommandInterface {
     private Request req = new Request();
     private HttpRequest request;
     private Response response;
@@ -36,7 +45,7 @@ public class Anime implements CommandInterface {
     private List<String> tempArgs;
     MessageReceivedEvent tempEvent;
 
-    public Anime (EventWaiter waiter) {
+    public Characters(EventWaiter waiter) {
         this.waiter = waiter;
     }
 
@@ -68,10 +77,11 @@ public class Anime implements CommandInterface {
                     if (response.getStatus() > 299)
                         return;
                     data = response.getResponseContent();
+                    System.out.println(data);
                     gson = new Gson();
-                    WeebObject animeData = gson.fromJson(data, WeebObject.class);
-                    AnimeInfo animeInfo = new AnimeInfo(animeData);
-                    channel.sendMessage(AnimeListEmbed(animeInfo, event, args).build()).queue(msg -> {
+                    WeebCharacterObject characterData = gson.fromJson(data, WeebCharacterObject.class);
+                    CharacterInfo characterInfo = new CharacterInfo(characterData);
+                    channel.sendMessage(CharacterListEmbed(characterInfo, event, args).build()).queue(msg -> {
                         msg.addReaction(left).queue();
                         msg.addReaction(right).queue();
                         msg.addReaction(one).queue();
@@ -80,7 +90,7 @@ public class Anime implements CommandInterface {
                         msg.addReaction(four).queue();
                         msg.addReaction(five).queue();
 
-                        initWaiter(msg, authorId, animeInfo);
+                        initWaiter(msg, authorId, characterInfo);
                     });
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
@@ -102,9 +112,9 @@ public class Anime implements CommandInterface {
                         return;
                     data = response.getResponseContent();
                     gson = new Gson();
-                    WeebObject animeData = gson.fromJson(data, WeebObject.class);
-                    AnimeInfo animeInfo = new AnimeInfo(animeData);
-                    channel.sendMessage(AnimeEmbed(animeInfo, 0, event).build()).queue();
+                    WeebCharacterObject characterData = gson.fromJson(data, WeebCharacterObject.class);
+                    CharacterInfo characterInfo = new CharacterInfo(characterData);
+                    channel.sendMessage(CharacterEmbed(characterInfo, 0, event).build()).queue();
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -114,7 +124,7 @@ public class Anime implements CommandInterface {
 
     @Override
     public String getName() {
-        return "anime";
+        return "character";
     }
 
     @Override
@@ -137,7 +147,7 @@ public class Anime implements CommandInterface {
         return "main";
     }
 
-    private void initWaiter(Message msg, long authorId, AnimeInfo info) {
+    private void initWaiter(Message msg, long authorId, CharacterInfo info) {
         waiter.waitForEvent(GuildMessageReactionAddEvent.class, (event) -> {
             MessageReaction.ReactionEmote emote = event.getReactionEmote();
             User user = event.getUser();
@@ -152,7 +162,7 @@ public class Anime implements CommandInterface {
                 if (left.equals(emote.getName())) {
                     if (pageNumber > 1) {
                         pageNumber--;
-                        editAnimeList(msg, authorId);
+                        editCharacterList(msg, authorId);
                     } else {
                         initWaiter(msg, authorId, info);
                     }
@@ -161,7 +171,7 @@ public class Anime implements CommandInterface {
                     if (info.getHasNextPage()) {
                         pageNumber++;
                         System.out.println(pageNumber);
-                        editAnimeList(msg, authorId);
+                        editCharacterList(msg, authorId);
                     } else {
                         initWaiter(msg, authorId, info);
                     }
@@ -180,7 +190,7 @@ public class Anime implements CommandInterface {
                     case five: index = 4;
                     break;
                 }
-                msg.editMessage(AnimeEmbed(info, index, tempEvent).build()).queue();
+                msg.editMessage(CharacterEmbed(info, index, tempEvent).build()).queue();
             }
         }, 30, TimeUnit.SECONDS,
                 () -> {
@@ -188,7 +198,7 @@ public class Anime implements CommandInterface {
         });
     }
 
-    private void editAnimeList(Message msg, long authorId) {
+    private void editCharacterList(Message msg, long authorId) {
         query = getQuery(tempArgs).replace("\n", " ").replace("  ", " ");
         request = HttpRequest.newBuilder()
                 .uri(URI.create("https://graphql.anilist.co"))
@@ -205,10 +215,10 @@ public class Anime implements CommandInterface {
             data = response.getResponseContent();
             System.out.println(data);
             gson = new Gson();
-            WeebObject animeData = gson.fromJson(data, WeebObject.class);
-            AnimeInfo animeInfo = new AnimeInfo(animeData);
-            msg.editMessage(AnimeListEmbed(animeInfo, tempEvent, tempArgs).build()).queue(message -> {
-                initWaiter(message, authorId, animeInfo);
+            WeebCharacterObject characterData = gson.fromJson(data, WeebCharacterObject.class);
+            CharacterInfo characterInfo = new CharacterInfo(characterData);
+            msg.editMessage(CharacterListEmbed(characterInfo, tempEvent, tempArgs).build()).queue(message -> {
+                initWaiter(message, authorId, characterInfo);
             });
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -220,13 +230,9 @@ public class Anime implements CommandInterface {
                 "query ($page: Int, $perPage: Int, $search: String) " +
                 "{ Page (page: $page, perPage: $perPage) " +
                 "{ pageInfo { total currentPage lastPage hasNextPage perPage } " +
-                "media (type: ANIME, search: $search) " +
-                "{ id isAdult episodes status siteUrl description(asHtml: false) " +
-                "title { english romaji native } " +
-                "coverImage { medium large } " +
-                "nextAiringEpisode { airingAt timeUntilAiring episode } " +
-                "startDate { year month day } " +
-                "characters(role: MAIN) { edges { node { name { first last } } } }" +
+                "characters (search: $search) " +
+                "{ name { first last} image { large } siteUrl description(asHtml: false) " +
+                "media { edges { characterRole node { title { english romaji native } } } }" +
                 " } } }\"," +
                 "\"variables\":" +
                 "{\"search\":\"" + String.join(" ", args) + "\"," +
@@ -234,62 +240,32 @@ public class Anime implements CommandInterface {
                 "\"perPage\":5}}";
     }
 
-    private EmbedBuilder AnimeListEmbed(AnimeInfo animeInfo, MessageReceivedEvent event, List<String> args) {
+    private EmbedBuilder CharacterListEmbed(CharacterInfo characterInfo, MessageReceivedEvent event, List<String> args) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Search Term: " + String.join(" ", args));
         embed.setAuthor("Results", null, event.getJDA().getSelfUser().getAvatarUrl());
         embed.setDescription("Navigate using the reactions");
         embed.setColor(12390624);
-        embed.setFooter(String.format("Page %d/%d", animeInfo.getPageNumber(), animeInfo.getPageCount()));
-        for (int i = 0; i < animeInfo.getAnimeSize(); i++) {
-            if (animeInfo.getAnime(i).isAdult() && !event.getTextChannel().isNSFW()) {
-                String name = "NSFW";
-                String value = "Please use this command in an NSFW channel to view";
-                embed.addField(name, value, false);
-            } else {
-                String name = animeInfo.getAnime(i).getTitleEnglish();
-                String value = animeInfo.getAnime(i).getTitleRomaji();
-                embed.addField(String.format("%d. %s", i+1, name), value, false);
-            }
+        embed.setFooter(String.format("Page %d/%d", characterInfo.getPageNumber(), characterInfo.getPageCount()));
+        for (int i = 0; i < characterInfo.getCharacterSize(); i++) {
+            String name = characterInfo.getCharacter(i).getEnglish();
+            String value = characterInfo.getCharacter(i).getFullName();
+            embed.addField(String.format("%d. %s", i+1, name), value, false);
         }
         return embed;
     }
 
-    private EmbedBuilder AnimeEmbed(AnimeInfo animeInfo, int index, MessageReceivedEvent event) {
-        AnimeObject anime = animeInfo.getAnime(index);
-        if (anime.isAdult()) {
-            if (event.getTextChannel().isNSFW()) {
-                return new EmbedBuilder()
-                        .setTitle(anime.getTitleRomaji())
-                        .setDescription(anime.getTitleEnglish())
-                        .setAuthor(anime.getTitleNative(), anime.getSiteUrl(), event.getJDA().getSelfUser().getAvatarUrl())
-                        .setThumbnail(anime.getThumbLarge())
-                        .addField("Description", anime.getDescription(), false)
-                        .addField("Main Characters", anime.getCharacters(), true)
-                        .addField("Episodes", anime.getEpisodes(), true)
-                        .addField("Status", anime.getStatus() + anime.getNextEpisode(), true)
-                        .addField("Start Date", anime.getStartDate(), true)
-                        .setFooter("Source: AniList")
-                        .setColor(12390624);
-            } else {
-                return new EmbedBuilder()
-                        .setDescription("Channel is not NSFW")
-                        .setColor(12390624);
-            }
-        } else {
-            return new EmbedBuilder()
-                    .setTitle(anime.getTitleRomaji())
-                    .setDescription(anime.getTitleEnglish())
-                    .setAuthor(anime.getTitleNative(), anime.getSiteUrl(), event.getJDA().getSelfUser().getAvatarUrl())
-                    .setThumbnail(anime.getThumbLarge())
-                    .addField("Description", anime.getDescription(), false)
-                    .addField("Main Characters", anime.getCharacters(), true)
-                    .addField("Episodes", anime.getEpisodes(), true)
-                    .addField("Status", anime.getStatus() + anime.getNextEpisode(), true)
-                    .addField("Start Date", anime.getStartDate(), true)
-                    .setFooter("Source: AniList")
-                    .setColor(12390624);
-        }
+    private EmbedBuilder CharacterEmbed(CharacterInfo characterInfo, int index, MessageReceivedEvent event) {
+        CharacterObject character = characterInfo.getCharacter(index);
+        return new EmbedBuilder()
+                .setTitle(character.getFullName())
+                .setAuthor(character.getFullName(), character.getSiteUrl(), event.getJDA().getSelfUser().getAvatarUrl())
+                .setThumbnail(character.getImageUrl())
+                .addField("Description", character.getDescription(), false)
+                .addField("Role", character.getRole(), true)
+                .addField("Appearances", character.getTitlesRomaji(), true)
+                .setFooter("Source: AniList")
+                .setColor(12390624);
     }
 
 

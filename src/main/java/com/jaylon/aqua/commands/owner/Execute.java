@@ -20,7 +20,6 @@ public class Execute implements CommandInterface {
         event.getChannel().sendMessage("<a:loading:649047596022759425> `Running...`").queue(message -> {
             long startTime = System.currentTimeMillis();
             String error = ":x: Something went wrong, and I'm not smart enough to explain what it was.";
-            double elapsedTime = 0;
             if(args.isEmpty()) {
                 return;
             }

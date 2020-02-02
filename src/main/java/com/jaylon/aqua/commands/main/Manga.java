@@ -7,9 +7,13 @@ import com.jaylon.aqua.objects.Response;
 import com.jaylon.aqua.objects.weeb.*;
 import com.jaylon.aqua.utils.Request;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.MessageReaction;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -17,7 +21,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class Anime implements CommandInterface {
+public class Manga implements CommandInterface {
     private Request req = new Request();
     private HttpRequest request;
     private Response response;
@@ -36,13 +40,12 @@ public class Anime implements CommandInterface {
     private List<String> tempArgs;
     MessageReceivedEvent tempEvent;
 
-    public Anime (EventWaiter waiter) {
+    public Manga (EventWaiter waiter) {
         this.waiter = waiter;
     }
 
-
     @Override
-    public void run(List<String> args, MessageReceivedEvent event) {
+    public void run(List<String> args, MessageReceivedEvent event) throws IOException, InterruptedException {
         if (pageNumber != 1)
             pageNumber = 1;
         MessageChannel channel = event.getChannel();
@@ -68,10 +71,11 @@ public class Anime implements CommandInterface {
                     if (response.getStatus() > 299)
                         return;
                     data = response.getResponseContent();
+                    System.out.println(data);
                     gson = new Gson();
-                    WeebObject animeData = gson.fromJson(data, WeebObject.class);
-                    AnimeInfo animeInfo = new AnimeInfo(animeData);
-                    channel.sendMessage(AnimeListEmbed(animeInfo, event, args).build()).queue(msg -> {
+                    WeebObject mangaData = gson.fromJson(data, WeebObject.class);
+                    MangaInfo mangaInfo = new MangaInfo(mangaData);
+                    channel.sendMessage(MangaListEmbed(mangaInfo, event, args).build()).queue(msg -> {
                         msg.addReaction(left).queue();
                         msg.addReaction(right).queue();
                         msg.addReaction(one).queue();
@@ -80,7 +84,7 @@ public class Anime implements CommandInterface {
                         msg.addReaction(four).queue();
                         msg.addReaction(five).queue();
 
-                        initWaiter(msg, authorId, animeInfo);
+                        initWaiter(msg, authorId, mangaInfo);
                     });
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
@@ -102,9 +106,9 @@ public class Anime implements CommandInterface {
                         return;
                     data = response.getResponseContent();
                     gson = new Gson();
-                    WeebObject animeData = gson.fromJson(data, WeebObject.class);
-                    AnimeInfo animeInfo = new AnimeInfo(animeData);
-                    channel.sendMessage(AnimeEmbed(animeInfo, 0, event).build()).queue();
+                    WeebObject mangaData = gson.fromJson(data, WeebObject.class);
+                    MangaInfo mangaInfo = new MangaInfo(mangaData);
+                    channel.sendMessage(MangaEmbed(mangaInfo, 0, event).build()).queue();
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -114,7 +118,7 @@ public class Anime implements CommandInterface {
 
     @Override
     public String getName() {
-        return "anime";
+        return "manga";
     }
 
     @Override
@@ -137,58 +141,58 @@ public class Anime implements CommandInterface {
         return "main";
     }
 
-    private void initWaiter(Message msg, long authorId, AnimeInfo info) {
+    private void initWaiter(Message msg, long authorId, MangaInfo info) {
         waiter.waitForEvent(GuildMessageReactionAddEvent.class, (event) -> {
-            MessageReaction.ReactionEmote emote = event.getReactionEmote();
-            User user = event.getUser();
+                    MessageReaction.ReactionEmote emote = event.getReactionEmote();
+                    User user = event.getUser();
 
-            return user.getIdLong() == authorId && event.getMessageIdLong() == msg.getIdLong() && !emote.isEmote() && (left.equals(emote.getName()) || right.equals(emote.getName()) || one.equals(emote.getName()) || two.equals(emote.getName()) || three.equals(emote.getName()) || four.equals(emote.getName()) || five.equals(emote.getName()));
-        }, (event) -> {
+                    return user.getIdLong() == authorId && event.getMessageIdLong() == msg.getIdLong() && !emote.isEmote() && (left.equals(emote.getName()) || right.equals(emote.getName()) || one.equals(emote.getName()) || two.equals(emote.getName()) || three.equals(emote.getName()) || four.equals(emote.getName()) || five.equals(emote.getName()));
+                }, (event) -> {
 
-            User user = event.getUser();
-            MessageReaction.ReactionEmote emote = event.getReactionEmote();
+                    User user = event.getUser();
+                    MessageReaction.ReactionEmote emote = event.getReactionEmote();
 
-            if (left.equals(emote.getName()) || right.equals(emote.getName())) {
-                if (left.equals(emote.getName())) {
-                    if (pageNumber > 1) {
-                        pageNumber--;
-                        editAnimeList(msg, authorId);
+                    if (left.equals(emote.getName()) || right.equals(emote.getName())) {
+                        if (left.equals(emote.getName())) {
+                            if (pageNumber > 1) {
+                                pageNumber--;
+                                editMangaList(msg, authorId);
+                            } else {
+                                initWaiter(msg, authorId, info);
+                            }
+                        }
+                        if (right.equals(emote.getName())) {
+                            if (info.getHasNextPage()) {
+                                pageNumber++;
+                                System.out.println(pageNumber);
+                                editMangaList(msg, authorId);
+                            } else {
+                                initWaiter(msg, authorId, info);
+                            }
+                        }
                     } else {
-                        initWaiter(msg, authorId, info);
+                        int index = 0;
+                        switch (emote.getName()) {
+                            case one: index = 0;
+                                break;
+                            case two: index = 1;
+                                break;
+                            case three: index = 2;
+                                break;
+                            case four: index = 3;
+                                break;
+                            case five: index = 4;
+                                break;
+                        }
+                        msg.editMessage(MangaEmbed(info, index, tempEvent).build()).queue();
                     }
-                }
-                if (right.equals(emote.getName())) {
-                    if (info.getHasNextPage()) {
-                        pageNumber++;
-                        System.out.println(pageNumber);
-                        editAnimeList(msg, authorId);
-                    } else {
-                        initWaiter(msg, authorId, info);
-                    }
-                }
-            } else {
-                int index = 0;
-                switch (emote.getName()) {
-                    case one: index = 0;
-                    break;
-                    case two: index = 1;
-                    break;
-                    case three: index = 2;
-                    break;
-                    case four: index = 3;
-                    break;
-                    case five: index = 4;
-                    break;
-                }
-                msg.editMessage(AnimeEmbed(info, index, tempEvent).build()).queue();
-            }
-        }, 30, TimeUnit.SECONDS,
+                }, 30, TimeUnit.SECONDS,
                 () -> {
-            msg.delete().queue();
-        });
+                    msg.delete().queue();
+                });
     }
 
-    private void editAnimeList(Message msg, long authorId) {
+    private void editMangaList(Message msg, long authorId) {
         query = getQuery(tempArgs).replace("\n", " ").replace("  ", " ");
         request = HttpRequest.newBuilder()
                 .uri(URI.create("https://graphql.anilist.co"))
@@ -205,10 +209,10 @@ public class Anime implements CommandInterface {
             data = response.getResponseContent();
             System.out.println(data);
             gson = new Gson();
-            WeebObject animeData = gson.fromJson(data, WeebObject.class);
-            AnimeInfo animeInfo = new AnimeInfo(animeData);
-            msg.editMessage(AnimeListEmbed(animeInfo, tempEvent, tempArgs).build()).queue(message -> {
-                initWaiter(message, authorId, animeInfo);
+            WeebObject mangaData = gson.fromJson(data, WeebObject.class);
+            MangaInfo mangaInfo = new MangaInfo(mangaData);
+            msg.editMessage(MangaListEmbed(mangaInfo, tempEvent, tempArgs).build()).queue(message -> {
+                initWaiter(message, authorId, mangaInfo);
             });
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
@@ -220,11 +224,10 @@ public class Anime implements CommandInterface {
                 "query ($page: Int, $perPage: Int, $search: String) " +
                 "{ Page (page: $page, perPage: $perPage) " +
                 "{ pageInfo { total currentPage lastPage hasNextPage perPage } " +
-                "media (type: ANIME, search: $search) " +
-                "{ id isAdult episodes status siteUrl description(asHtml: false) " +
+                "media (type: MANGA, search: $search) " +
+                "{ id isAdult volumes status siteUrl description(asHtml: false) " +
                 "title { english romaji native } " +
                 "coverImage { medium large } " +
-                "nextAiringEpisode { airingAt timeUntilAiring episode } " +
                 "startDate { year month day } " +
                 "characters(role: MAIN) { edges { node { name { first last } } } }" +
                 " } } }\"," +
@@ -234,41 +237,41 @@ public class Anime implements CommandInterface {
                 "\"perPage\":5}}";
     }
 
-    private EmbedBuilder AnimeListEmbed(AnimeInfo animeInfo, MessageReceivedEvent event, List<String> args) {
+    private EmbedBuilder MangaListEmbed(MangaInfo mangaInfo, MessageReceivedEvent event, List<String> args) {
         EmbedBuilder embed = new EmbedBuilder();
         embed.setTitle("Search Term: " + String.join(" ", args));
         embed.setAuthor("Results", null, event.getJDA().getSelfUser().getAvatarUrl());
         embed.setDescription("Navigate using the reactions");
         embed.setColor(12390624);
-        embed.setFooter(String.format("Page %d/%d", animeInfo.getPageNumber(), animeInfo.getPageCount()));
-        for (int i = 0; i < animeInfo.getAnimeSize(); i++) {
-            if (animeInfo.getAnime(i).isAdult() && !event.getTextChannel().isNSFW()) {
+        embed.setFooter(String.format("Page %d/%d", mangaInfo.getPageNumber(), mangaInfo.getPageCount()));
+        for (int i = 0; i < mangaInfo.getMangaSize(); i++) {
+            if (mangaInfo.getManga(i).isAdult() && !event.getTextChannel().isNSFW()) {
                 String name = "NSFW";
                 String value = "Please use this command in an NSFW channel to view";
                 embed.addField(name, value, false);
             } else {
-                String name = animeInfo.getAnime(i).getTitleEnglish();
-                String value = animeInfo.getAnime(i).getTitleRomaji();
+                String name = mangaInfo.getManga(i).getTitleEnglish();
+                String value = mangaInfo.getManga(i).getTitleRomaji();
                 embed.addField(String.format("%d. %s", i+1, name), value, false);
             }
         }
         return embed;
     }
 
-    private EmbedBuilder AnimeEmbed(AnimeInfo animeInfo, int index, MessageReceivedEvent event) {
-        AnimeObject anime = animeInfo.getAnime(index);
-        if (anime.isAdult()) {
+    private EmbedBuilder MangaEmbed(MangaInfo mangaInfo, int index, MessageReceivedEvent event) {
+        MangaObject manga = mangaInfo.getManga(index);
+        if (manga.isAdult()) {
             if (event.getTextChannel().isNSFW()) {
                 return new EmbedBuilder()
-                        .setTitle(anime.getTitleRomaji())
-                        .setDescription(anime.getTitleEnglish())
-                        .setAuthor(anime.getTitleNative(), anime.getSiteUrl(), event.getJDA().getSelfUser().getAvatarUrl())
-                        .setThumbnail(anime.getThumbLarge())
-                        .addField("Description", anime.getDescription(), false)
-                        .addField("Main Characters", anime.getCharacters(), true)
-                        .addField("Episodes", anime.getEpisodes(), true)
-                        .addField("Status", anime.getStatus() + anime.getNextEpisode(), true)
-                        .addField("Start Date", anime.getStartDate(), true)
+                        .setTitle(manga.getTitleRomaji())
+                        .setDescription(manga.getTitleEnglish())
+                        .setAuthor(manga.getTitleNative(), manga.getSiteUrl(), event.getJDA().getSelfUser().getAvatarUrl())
+                        .setThumbnail(manga.getThumbLarge())
+                        .addField("Description", manga.getDescription(), false)
+                        .addField("Main Characters", manga.getCharacters(), true)
+                        .addField("Volumes", manga.getVolumes(), true)
+                        .addField("Status", manga.getStatus(), true)
+                        .addField("Start Date", manga.getStartDate(), true)
                         .setFooter("Source: AniList")
                         .setColor(12390624);
             } else {
@@ -278,19 +281,17 @@ public class Anime implements CommandInterface {
             }
         } else {
             return new EmbedBuilder()
-                    .setTitle(anime.getTitleRomaji())
-                    .setDescription(anime.getTitleEnglish())
-                    .setAuthor(anime.getTitleNative(), anime.getSiteUrl(), event.getJDA().getSelfUser().getAvatarUrl())
-                    .setThumbnail(anime.getThumbLarge())
-                    .addField("Description", anime.getDescription(), false)
-                    .addField("Main Characters", anime.getCharacters(), true)
-                    .addField("Episodes", anime.getEpisodes(), true)
-                    .addField("Status", anime.getStatus() + anime.getNextEpisode(), true)
-                    .addField("Start Date", anime.getStartDate(), true)
+                    .setTitle(manga.getTitleRomaji())
+                    .setDescription(manga.getTitleEnglish())
+                    .setAuthor(manga.getTitleNative(), manga.getSiteUrl(), event.getJDA().getSelfUser().getAvatarUrl())
+                    .setThumbnail(manga.getThumbLarge())
+                    .addField("Description", manga.getDescription(), false)
+                    .addField("Main Characters", manga.getCharacters(), true)
+                    .addField("Volumes", manga.getVolumes(), true)
+                    .addField("Status", manga.getStatus(), true)
+                    .addField("Start Date", manga.getStartDate(), true)
                     .setFooter("Source: AniList")
                     .setColor(12390624);
         }
     }
-
-
 }

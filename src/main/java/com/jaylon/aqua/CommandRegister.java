@@ -1,6 +1,7 @@
 package com.jaylon.aqua;
 
 import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
+import com.jaylon.aqua.commands.admin.SetPrefix;
 import com.jaylon.aqua.commands.main.*;
 import com.jaylon.aqua.commands.owner.*;
 import com.jaylon.aqua.commands.util.*;
@@ -26,6 +27,11 @@ public class CommandRegister {
         addCommand(new Execute());
         addCommand(new YouTubetoMP3());
         addCommand(new Anime(waiter));
+        addCommand(new Manga(waiter));
+        addCommand(new Characters(waiter));
+        addCommand(new Eval());
+        addCommand(new Stats());
+        addCommand(new SetPrefix());
     }
 
     private final Map<String, CommandInterface> commands = new HashMap<>();

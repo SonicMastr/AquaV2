@@ -30,26 +30,34 @@ public class MessageReceived extends ListenerAdapter {
 
         if (event.isFromType(ChannelType.TEXT)) {
 
+            String raw = event.getMessage().getContentRaw();
+
             Guild guild = event.getGuild();
             TextChannel textChannel = event.getTextChannel();
 
             logger.debug(String.format("(%s)[%s]<%#s>: %s", guild.getName(), textChannel.getName(), author, content));
 
             /* Check for Command */
-            if(event.getMessage().getContentRaw().equalsIgnoreCase(Settings.PREFIX + "shutdown") &&
+            if(raw.equalsIgnoreCase(Settings.PREFIX + "shutdown") &&
                     event.getAuthor().getIdLong() == Settings.OWNER) {
                 shutdown(event.getJDA());
                 return;
             }
-            if(event.getMessage().getContentRaw().startsWith(Settings.PREFIX) && !event.getMessage().isWebhookMessage() &&
-                    !event.getAuthor().isBot()) {
-                manager = new CommandHandler(event, register);
+
+            String prefix = Settings.PREFIXES.computeIfAbsent(event.getGuild().getIdLong(), (l) -> Settings.PREFIX);
+
+
+            if(raw.startsWith(prefix) && !event.getMessage().isWebhookMessage() && !event.getAuthor().isBot()) {
+                manager = new CommandHandler(event, register, prefix);
                 new Thread(manager).start();
-                logger.info("Nope");
+            } else if(raw.startsWith(Settings.PREFIX) && !event.getMessage().isWebhookMessage() && !event.getAuthor().isBot()) {
+                manager = new CommandHandler(event, register, Settings.PREFIX);
+                new Thread(manager).start();
             }
         } else if (event.isFromType(ChannelType.PRIVATE)) {
-            if (event.getMessage().getContentRaw().toLowerCase().startsWith(Settings.PREFIX + "help")) {
-                manager = new CommandHandler(event, register);
+            String raw = event.getMessage().getContentRaw();
+            if (raw.toLowerCase().startsWith(Settings.PREFIX + "help") || raw.toLowerCase().startsWith(Settings.PREFIX + " help")) {
+                manager = new CommandHandler(event, register, Settings.PREFIX);
                 new Thread(manager).start();
                 logger.info("Nope");
                 //manager.run(event);

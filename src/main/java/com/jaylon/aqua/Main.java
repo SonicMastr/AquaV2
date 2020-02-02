@@ -4,10 +4,8 @@ import com.jagrosh.jdautilities.commons.waiter.EventWaiter;
 import com.jaylon.aqua.config.Config;
 import com.jaylon.aqua.events.*;
 import com.jaylon.aqua.updater.VersionDeployer;
-import jdk.jfr.Event;
-import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,16 +22,18 @@ public class Main {
         EventWaiter waiter = new EventWaiter();
         CommandRegister commandRegister = new CommandRegister(waiter);
         MessageReceived messageReceived = new MessageReceived(commandRegister);
+        Settings.getPrefixes();
 
         try {
             logger.info("Starting");
-            new JDABuilder(AccountType.BOT)
+            new DefaultShardManagerBuilder()
                     .setToken(config.getString("token"))
+                    .setShardsTotal(2)
                     .setActivity(Activity.playing("Being Useless (In Java)"))
                     .addEventListeners(new Ready(), messageReceived, waiter)
-                    .build().awaitReady();
+                    .build();
             logger.info("Running");
-        } catch (LoginException | InterruptedException e) {
+        } catch (LoginException e) {
             e.printStackTrace();
         }
     }

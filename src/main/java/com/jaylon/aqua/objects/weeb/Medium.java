@@ -14,6 +14,9 @@ public class Medium implements Serializable
     @SerializedName("isAdult")
     @Expose
     private Boolean isAdult;
+    @SerializedName("volumes")
+    @Expose
+    private Integer volumes;
     @SerializedName("episodes")
     @Expose
     private Integer episodes;
@@ -65,6 +68,14 @@ public class Medium implements Serializable
 
     public void setEpisodes(Integer episodes) {
         this.episodes = episodes;
+    }
+
+    public Integer getVolumes() {
+        return volumes;
+    }
+
+    public void setVolumes(Integer volumes) {
+        this.volumes = volumes;
     }
 
     public String getStatus() {

@@ -1,29 +1,28 @@
 package com.jaylon.aqua.objects.weeb;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class AnimeObject {
-    private String titleEnglish, titleRomaji, titleNative, siteUrl, thumbLarge, thumbMedium, description, startDate, nextEpisode, status, characters, episodes;
+public class MangaObject {
+    private String titleEnglish, titleRomaji, titleNative, siteUrl, thumbLarge, thumbMedium, description, startDate, status, characters, volumes;
+
     private boolean isAdult;
 
-    public AnimeObject(Medium anime) {
-        this.titleEnglish = anime.getTitle().getEnglish();
-        this.titleNative = anime.getTitle().getNative();
-        this.titleRomaji = anime.getTitle().getRomaji();
-        this.siteUrl = anime.getSiteUrl();
-        this.thumbLarge = anime.getCoverImage().getLarge();
-        this.thumbMedium = anime.getCoverImage().getMedium();
-        this.episodes = Objects.requireNonNullElse(anime.getEpisodes(), "None").toString();
-        this.isAdult = anime.getIsAdult();
-        setDescription(anime.getDescription());
-        setCharacters(anime.getCharacters().getEdges());
-        setStatus(anime.getStatus());
-        setNextEpisode(anime.getNextAiringEpisode());
-        setStartDate(anime.getStartDate());
+    public MangaObject(Medium medium) {
+        this.titleEnglish = medium.getTitle().getEnglish();
+        this.titleNative = medium.getTitle().getNative();
+        this.titleRomaji = medium.getTitle().getRomaji();
+        this.siteUrl = medium.getSiteUrl();
+        this.thumbLarge = medium.getCoverImage().getLarge();
+        this.thumbMedium = medium.getCoverImage().getMedium();
+        this.volumes = Objects.requireNonNullElse(medium.getVolumes(), "None").toString();
+        this.isAdult = medium.getIsAdult();
+        setDescription(medium.getDescription());
+        setCharacters(medium.getCharacters().getEdges());
+        setStatus(medium.getStatus());
+        setStartDate(medium.getStartDate());
     }
 
     /* Setters */
@@ -68,18 +67,6 @@ public class AnimeObject {
                 break;
         }
         this.status = status;
-    }
-
-    private void setNextEpisode(NextAiringEpisode episode) {
-        if (episode != null && episode.getAiringAt() != null && episode.getEpisode() != null) {
-            SimpleDateFormat format = new SimpleDateFormat("M/d/yyyy");
-            Date date = new Date( (long) episode.getAiringAt() * 1000);
-            String nextDate = format.format(date);
-            String nextEpisode = Objects.requireNonNullElse(episode.getEpisode(), "").toString();
-            this.nextEpisode = "\nEpisode " + nextEpisode + " Airs **" + nextDate + "**";
-        } else {
-            this.nextEpisode = "";
-        }
     }
 
     private void setStartDate(StartDate startDate) {
@@ -134,23 +121,18 @@ public class AnimeObject {
         return startDate;
     }
 
-    public String getNextEpisode() {
-        return nextEpisode;
-    }
-
     public String getStatus() {
         return status;
     }
+
+    public String getVolumes() { return volumes; }
 
     public String getCharacters() {
         return characters;
     }
 
-    public String getEpisodes() {
-        return episodes;
-    }
-
     public boolean isAdult() {
         return isAdult;
     }
+
 }

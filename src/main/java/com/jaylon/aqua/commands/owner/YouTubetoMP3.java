@@ -1,4 +1,4 @@
-package com.jaylon.aqua.commands.main;
+package com.jaylon.aqua.commands.owner;
 
 import com.jaylon.aqua.objects.CommandInterface;
 import net.dv8tion.jda.api.entities.Message;
@@ -64,7 +64,7 @@ public class YouTubetoMP3 implements CommandInterface {
 
     @Override
     public String getType() {
-        return "main";
+        return "owner";
     }
 
     private void startProcess(Message message, ProcessBuilder processBuilder) throws IOException, InterruptedException {
