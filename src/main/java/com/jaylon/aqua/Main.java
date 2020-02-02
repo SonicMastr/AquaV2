@@ -29,7 +29,7 @@ public class Main {
             new DefaultShardManagerBuilder()
                     .setToken(config.getString("token"))
                     .setShardsTotal(2)
-                    .setActivity(Activity.playing("Being Useless (In Java)"))
+                    .setActivity(Activity.playing("Watching Anime"))
                     .addEventListeners(new Ready(), messageReceived, waiter)
                     .build();
             logger.info("Running");
