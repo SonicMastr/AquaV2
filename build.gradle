@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = 'me.jaylon.aqua.Main'
 
-version '1.03'
+version '1.04'
 
 sourceCompatibility = 1.11
 
@@ -15,7 +15,7 @@ repositories {
 }
 
 dependencies {
-    compile 'net.dv8tion:JDA:4.1.1_104'
+    compile 'net.dv8tion:JDA:4.1.1_105'
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile 'com.jagrosh:jda-utilities:3.0.2'
     compile group: 'org.json', name: 'json', version: '20190722'
