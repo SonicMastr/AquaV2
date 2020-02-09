@@ -26,7 +26,7 @@ public class VersionManager {
         return versions;
     }
 
-    public double getVersion() { return 1.042; }
+    public double getVersion() { return 1.043; }
 
     public void deleteJar(@NotNull Double version) {
         File file = new File("./AquaV2-" + version.toString() + ".jar");

@@ -70,7 +70,7 @@ public class Update implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return null;
+        return new String[]{"u"};
     }
 
     @Override
