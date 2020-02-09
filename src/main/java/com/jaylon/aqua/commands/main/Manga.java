@@ -123,17 +123,17 @@ public class Manga implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return new String[0];
+        return new String[]{"m", "man"};
     }
 
     @Override
     public String getUsage() {
-        return null;
+        return "manga (-l) ``[manga]``";
     }
 
     @Override
     public String getDesc() {
-        return null;
+        return "Returns a Manga (or a list of Manga with -l) to view";
     }
 
     @Override

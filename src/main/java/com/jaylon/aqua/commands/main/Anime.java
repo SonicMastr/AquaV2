@@ -119,17 +119,17 @@ public class Anime implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return new String[0];
+        return new String[]{"an", "ani"};
     }
 
     @Override
     public String getUsage() {
-        return null;
+        return "anime (-l) ``[anime]``";
     }
 
     @Override
     public String getDesc() {
-        return null;
+        return "Returns an Anime (or a list of Anime with -l) to view";
     }
 
     @Override

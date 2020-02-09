@@ -49,7 +49,7 @@ public class Help implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return null;
+        return new String[]{"commands"};
     }
 
     @Override

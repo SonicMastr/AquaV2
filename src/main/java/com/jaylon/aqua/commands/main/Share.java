@@ -38,7 +38,7 @@ public class Share implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return null;
+        return new String[]{"s"};
     }
 
     @Override

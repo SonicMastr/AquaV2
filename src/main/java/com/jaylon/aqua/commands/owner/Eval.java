@@ -67,7 +67,7 @@ public class Eval implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return new String[0];
+        return new String[]{"ev"};
     }
 
     @Override

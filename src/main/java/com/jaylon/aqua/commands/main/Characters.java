@@ -129,17 +129,17 @@ public class Characters implements CommandInterface {
 
     @Override
     public String[] getAliases() {
-        return new String[0];
+        return new String[]{"c", "char"};
     }
 
     @Override
     public String getUsage() {
-        return null;
+        return "character (-l) ``[character]``";
     }
 
     @Override
     public String getDesc() {
-        return null;
+        return "Returns a Character (or a list of Characters with -l) to view";
     }
 
     @Override
