@@ -45,7 +45,7 @@ public class CommandHandler implements Runnable {
     private void keyCheck(MessageReceivedEvent event, String[] split, String comName, Map<String, CommandInterface> aliases) {
         if(aliases.containsKey(comName)) {
             final List<String> args = new ArrayList<>(Arrays.asList(split).subList(1, split.length));
-            if (aliases.get(comName).getType().equals("main")) {
+            if (aliases.get(comName).getType().equals("owner")) {
                 if (event.getAuthor().getIdLong() == Settings.OWNER) {
                     try {
                         logger.info("New Command " + comName + " Thread Spawned");
