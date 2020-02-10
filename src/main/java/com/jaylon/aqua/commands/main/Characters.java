@@ -24,6 +24,7 @@ import java.net.URI;
 import java.net.http.HttpRequest;
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class Characters implements CommandInterface {
@@ -263,7 +264,7 @@ public class Characters implements CommandInterface {
                 .setThumbnail(character.getImageUrl())
                 .addField("Description", character.getDescription(), false)
                 .addField("Role", character.getRole(), true)
-                .addField("Appearances", character.getTitlesRomaji(), true)
+                .addField("Appearances", Objects.requireNonNullElse(character.getTitlesRomaji(), "None Available"), true)
                 .setFooter("Source: AniList")
                 .setColor(12390624);
     }
