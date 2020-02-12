@@ -32,6 +32,7 @@ public class CommandRegister {
         addCommand(new Eval());
         addCommand(new Stats());
         addCommand(new SetPrefix());
+        addCommand(new Misaka());
     }
 
     private final Map<String, CommandInterface> commands = new HashMap<>();

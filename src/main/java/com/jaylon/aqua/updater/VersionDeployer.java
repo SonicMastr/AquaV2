@@ -29,7 +29,6 @@ public class VersionDeployer {
                 logger.warn("Attempting to Delete...");
                 new VersionManager().deleteJar(versionNumb);
             } else if (versionNumb.equals(versionCurrent)) {
-                continue;
             } else if (versionNumb > versionCurrent) {
                 logger.info("Found New Version: " + versionNumb.toString());
                 logger.info("Attempting to Start Newer Version...");
