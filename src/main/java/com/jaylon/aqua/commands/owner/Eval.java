@@ -4,7 +4,10 @@ import com.jaylon.aqua.objects.CommandInterface;
 import groovy.lang.GroovyShell;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +32,7 @@ public class Eval implements CommandInterface {
 
     @Override
     public void run(List<String> args, MessageReceivedEvent event) throws IOException, InterruptedException {
+        int limit = 1927;
         if (args.isEmpty()) {
             event.getChannel().sendMessage("You didn't provide arguments").queue();
             return;
@@ -51,6 +55,10 @@ public class Eval implements CommandInterface {
 
             if (out == null) {
                 event.getChannel().sendMessageFormat(":white_check_mark: `Executed without error in %.3f seconds`", elapsedTime).queue();
+            } else if(out.toString().length() > limit) {
+                Files.writeString(Path.of("output.txt"), out.toString());
+                event.getChannel().sendMessageFormat(":white_check_mark: `Finished in %.3f seconds`%nThat was a bit big, so here you go.", elapsedTime).queue();
+                event.getChannel().sendFile(new File("output.txt")).queue();
             } else {
                 event.getChannel().sendMessageFormat(":white_check_mark: `Finished in %.3f seconds` ```java%n%s%n```", elapsedTime, out.toString()).queue();
             }
