@@ -12,13 +12,15 @@ public class Misaka implements CommandInterface {
     public void run(List<String> args, MessageReceivedEvent event) throws IOException, InterruptedException {
         MessageChannel channel = event.getChannel();
         if (!args.isEmpty()) {
-            if (args.get(0) != null && args.get(0).toLowerCase().contentEquals("misaka")) {
-                    channel.sendMessage("Misaka Misaka").queue();
-            } else {
-                channel.sendMessage("Misaka").queue();
+            int count = args.size();
+            StringBuilder misaka = new StringBuilder();
+            for (int i = 0; i < count; i++) {
+                misaka.append("Misaka ");
             }
+            channel.sendMessage(misaka.toString()).queue();
+
         } else {
-            channel.sendMessage("Misaka").queue();
+            channel.sendMessage("Misaka ").queue();
         }
     }
 
