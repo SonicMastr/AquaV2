@@ -17,7 +17,7 @@ public class Misaka implements CommandInterface {
             for (int i = 0; i < count; i++) {
                 misaka.append("Misaka ");
             }
-            channel.sendMessage(misaka.toString()).queue();
+            channel.sendMessage("Misaka " + misaka.toString()).queue();
 
         } else {
             channel.sendMessage("Misaka ").queue();
