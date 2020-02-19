@@ -13,23 +13,7 @@ public class Misaka implements CommandInterface {
         MessageChannel channel = event.getChannel();
         if (!args.isEmpty()) {
             if (args.get(0) != null && args.get(0).toLowerCase().contentEquals("misaka")) {
-                if (args.get(1) != null && args.get(1).toLowerCase().contentEquals("misaka")) {
-                    if (args.get(2) != null && args.get(2).toLowerCase().contentEquals("misaka")) {
-                        if (args.get(3) != null && args.get(3).toLowerCase().contentEquals("misaka")) {
-                            if (args.get(4) != null && args.get(4).toLowerCase().contentEquals("misaka")) {
-                                channel.sendMessage("<@182245310024777728> You need to call the FBI").queue();
-                            } else {
-                                channel.sendMessage("Dude. You need to stop").queue();
-                            }
-                        } else {
-                            channel.sendMessage("Calm down, man.").queue();
-                        }
-                    } else {
-                        channel.sendMessage("That's a little too much Misaka").queue();
-                    }
-                } else {
                     channel.sendMessage("Misaka Misaka").queue();
-                }
             } else {
                 channel.sendMessage("Misaka").queue();
             }
