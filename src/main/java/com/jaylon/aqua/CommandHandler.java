@@ -56,7 +56,7 @@ public class CommandHandler implements Runnable {
                         logger.info("Command Thread Dead");
                     }
                 } else {
-                    event.getChannel().sendMessage(":x: Sorry. You're not allowed to do this").queue();
+                    //event.getChannel().sendMessage(":x: Sorry. You're not allowed to do this").queue();
                 }
             } else {
                 try {

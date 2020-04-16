@@ -48,6 +48,7 @@ public class Eval implements CommandInterface {
             engine.setProperty("jda", event.getJDA());
             engine.setProperty("guild", event.getGuild());
             engine.setProperty("member", event.getMember());
+            
 
             String script = imports + String.join(" ", args);
             Object out = engine.evaluate(script);
