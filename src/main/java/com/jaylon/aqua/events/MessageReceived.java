@@ -44,6 +44,12 @@ public class MessageReceived extends ListenerAdapter {
                 return;
             }
 
+            if(raw.equalsIgnoreCase("sharex") &&
+                    event.getAuthor().getIdLong() == Settings.OWNER) {
+                event.getChannel().sendMessage("bad").queue();
+                return;
+            }
+
             String prefix = Settings.PREFIXES.computeIfAbsent(event.getGuild().getIdLong(), (l) -> Settings.PREFIX);
 
 
