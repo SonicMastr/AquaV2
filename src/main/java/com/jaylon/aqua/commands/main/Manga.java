@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -242,7 +243,7 @@ public class Manga implements CommandInterface {
         embed.setTitle("Search Term: " + String.join(" ", args));
         embed.setAuthor("Results", null, event.getJDA().getSelfUser().getAvatarUrl());
         embed.setDescription("Navigate using the reactions");
-        embed.setColor(12390624);
+        embed.setColor(new Color(112, 238, 119));
         embed.setFooter(String.format("Page %d/%d", mangaInfo.getPageNumber(), mangaInfo.getPageCount()));
         for (int i = 0; i < mangaInfo.getMangaSize(); i++) {
             if (mangaInfo.getManga(i).isAdult() && !event.getTextChannel().isNSFW()) {
@@ -273,11 +274,11 @@ public class Manga implements CommandInterface {
                         .addField("Status", manga.getStatus(), true)
                         .addField("Start Date", manga.getStartDate(), true)
                         .setFooter("Source: AniList")
-                        .setColor(12390624);
+                        .setColor(new Color(112, 238, 119));
             } else {
                 return new EmbedBuilder()
                         .setDescription("Channel is not NSFW")
-                        .setColor(12390624);
+                        .setColor(new Color(255, 0, 0));
             }
         } else {
             return new EmbedBuilder()
@@ -291,7 +292,7 @@ public class Manga implements CommandInterface {
                     .addField("Status", manga.getStatus(), true)
                     .addField("Start Date", manga.getStartDate(), true)
                     .setFooter("Source: AniList")
-                    .setColor(12390624);
+                    .setColor(new Color(112, 238, 119));
         }
     }
 }

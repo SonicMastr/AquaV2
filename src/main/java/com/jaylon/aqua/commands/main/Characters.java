@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
 
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -246,7 +247,7 @@ public class Characters implements CommandInterface {
         embed.setTitle("Search Term: " + String.join(" ", args));
         embed.setAuthor("Results", null, event.getJDA().getSelfUser().getAvatarUrl());
         embed.setDescription("Navigate using the reactions");
-        embed.setColor(12390624);
+        embed.setColor(new Color(0, 204, 255));
         embed.setFooter(String.format("Page %d/%d", characterInfo.getPageNumber(), characterInfo.getPageCount()));
         for (int i = 0; i < characterInfo.getCharacterSize(); i++) {
             String name = characterInfo.getCharacter(i).getEnglish();
@@ -266,7 +267,7 @@ public class Characters implements CommandInterface {
                 .addField("Role", character.getRole(), true)
                 .addField("Appearances", Objects.requireNonNullElse(character.getTitlesRomaji(), "None Available"), true)
                 .setFooter("Source: AniList")
-                .setColor(12390624);
+                .setColor(new Color(0, 204, 255));
     }
 
 

@@ -10,6 +10,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.events.message.guild.react.GuildMessageReactionAddEvent;
+
+import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpRequest;
@@ -274,7 +276,7 @@ public class Anime implements CommandInterface {
             } else {
                 return new EmbedBuilder()
                         .setDescription("Channel is not NSFW")
-                        .setColor(12390624);
+                        .setColor(new Color(255, 0, 0));
             }
         } else {
             return new EmbedBuilder()
