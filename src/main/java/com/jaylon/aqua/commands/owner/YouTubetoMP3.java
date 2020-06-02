@@ -31,7 +31,7 @@ public class YouTubetoMP3 implements CommandInterface {
             }
             else {
                 try {
-                    processBuilder.command("sh", "-c", "ytdl " + args + " | ffmpeg -y -i pipe:0 -b:a 128K -vn output.mp3");
+                    processBuilder.command("sh", "-c", "rm output.mp3 | youtube-dl -f bestaudio --extract-audio --audio-format mp3 --audio-quality 0 --no-continue -o output.mp3 " + args.get(0));
                     startProcess(message,  processBuilder);
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();

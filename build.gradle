@@ -6,7 +6,7 @@ plugins {
 
 mainClassName = 'me.jaylon.aqua.Main'
 
-version '1.06'
+version '1.07'
 
 sourceCompatibility = 1.11
 
