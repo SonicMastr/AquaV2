@@ -5,6 +5,7 @@ import com.jaylon.aqua.config.Config;
 import com.jaylon.aqua.events.*;
 import com.jaylon.aqua.updater.VersionDeployer;
 import net.dv8tion.jda.api.entities.Activity;
+import static net.dv8tion.jda.api.requests.GatewayIntent.*;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +28,9 @@ public class Main {
         try {
             logger.info("Starting");
             new DefaultShardManagerBuilder()
+                    .create(GUILD_MESSAGES, DIRECT_MESSAGES, GUILD_MESSAGE_REACTIONS, DIRECT_MESSAGE_REACTIONS)
                     .setToken(config.getString("token"))
-                    .setShardsTotal(2)
+                    .setShardsTotal(5)
                     .setActivity(Activity.playing("Watching Anime"))
                     .addEventListeners(new Ready(), messageReceived, waiter)
                     .build();
